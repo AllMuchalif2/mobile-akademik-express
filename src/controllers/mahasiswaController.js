@@ -8,7 +8,7 @@ export const getAll = async (req, res, next) => {
   try {
     const { data, error } = await supabase.from(TABLE).select('*');
     if (error) throw error;
-    res.status(200).json({ status: 200, data });
+    res.status(200).json(data);
   } catch (err) {
     next(err);
   }
@@ -24,9 +24,9 @@ export const getById = async (req, res, next) => {
       .eq(PK, nim)
       .single();
     if (error || !data) {
-      return res.status(404).json({ status: 404, error: `No Data Found with nim ${nim}` });
+      return res.status(404).json({ error: `No Data Found with nim ${nim}` });
     }
-    res.status(200).json({ status: 200, data });
+    res.status(200).json(data);
   } catch (err) {
     next(err);
   }
@@ -42,7 +42,7 @@ export const create = async (req, res, next) => {
       .select()
       .single();
     if (error) throw error;
-    res.status(201).json({ status: 201, messages: { success: 'Data Saved' }, data });
+    res.status(201).json(data);
   } catch (err) {
     next(err);
   }
@@ -61,7 +61,7 @@ export const update = async (req, res, next) => {
       .eq(PK, nim)
       .single();
     if (!existing) {
-      return res.status(404).json({ status: 404, error: `nim ${nim} tidak ditemukan` });
+      return res.status(404).json({ error: `nim ${nim} tidak ditemukan` });
     }
 
     const { data, error } = await supabase
@@ -71,7 +71,7 @@ export const update = async (req, res, next) => {
       .select()
       .single();
     if (error) throw error;
-    res.status(200).json({ status: 200, messages: { success: 'Data Updated' }, data });
+    res.status(200).json(data);
   } catch (err) {
     next(err);
   }
@@ -89,12 +89,12 @@ export const remove = async (req, res, next) => {
       .eq(PK, nim)
       .single();
     if (!existing) {
-      return res.status(404).json({ status: 404, error: `nim ${nim} tidak ditemukan` });
+      return res.status(404).json({ error: `nim ${nim} tidak ditemukan` });
     }
 
     const { error } = await supabase.from(TABLE).delete().eq(PK, nim);
     if (error) throw error;
-    res.status(200).json({ status: 200, messages: { success: `nim ${nim} Deleted` } });
+    res.status(200).json({ message: `nim ${nim} Deleted` });
   } catch (err) {
     next(err);
   }
