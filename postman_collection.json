@@ -1,0 +1,680 @@
+{
+  "info": {
+    "_postman_id": "c7a8b9f1-3d2e-4b6a-9123-akademikexpress",
+    "name": "Akademik Express API",
+    "description": "Koleksi Postman lengkap beserta automated test scripts untuk API Akademik Express.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "test_nim",
+      "value": "23.230.9999",
+      "type": "string"
+    },
+    {
+      "key": "test_nip",
+      "value": "198501012010011999",
+      "type": "string"
+    },
+    {
+      "key": "test_kode_barang",
+      "value": "BRG-TEST-01",
+      "type": "string"
+    },
+    {
+      "key": "test_nik",
+      "value": "3324000000000001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Check Server Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response contains message and endpoints', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.status).to.eql(200);",
+                  "    pm.expect(jsonData).to.have.property('endpoints');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mahasiswa",
+      "item": [
+        {
+          "name": "Create Mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Verify created data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nim).to.eql(pm.collectionVariables.get('test_nim'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"{{test_nim}}\",\n  \"nama\": \"Mahasiswa Uji\",\n  \"prodi\": \"Teknik Informatika\",\n  \"kelas\": \"A\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mahasiswa",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mahasiswa"]
+            }
+          }
+        },
+        {
+          "name": "Get All Mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is an array', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/mahasiswa",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mahasiswa"]
+            }
+          }
+        },
+        {
+          "name": "Get Mahasiswa By NIM",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('NIM matches parameter', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nim).to.eql(pm.collectionVariables.get('test_nim'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/mahasiswa/{{test_nim}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mahasiswa", "{{test_nim}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Name updated successfully', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nama).to.eql('Mahasiswa Uji Update');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Mahasiswa Uji Update\",\n  \"prodi\": \"Sistem Informasi\",\n  \"kelas\": \"B\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mahasiswa/{{test_nim}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mahasiswa", "{{test_nim}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/mahasiswa/{{test_nim}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mahasiswa", "{{test_nim}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pegawai",
+      "item": [
+        {
+          "name": "Create Pegawai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nip\": \"{{test_nip}}\",\n  \"nama\": \"Pegawai Uji\",\n  \"dinas\": \"Dinas Kominfo\",\n  \"jabatan\": \"Pranata Komputer\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pegawai",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pegawai"]
+            }
+          }
+        },
+        {
+          "name": "Get All Pegawai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pegawai",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pegawai"]
+            }
+          }
+        },
+        {
+          "name": "Get Pegawai By NIP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pegawai/{{test_nip}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pegawai", "{{test_nip}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Pegawai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Pegawai Uji Update\",\n  \"dinas\": \"Dinas Pendidikan\",\n  \"jabatan\": \"Staff Ahli\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pegawai/{{test_nip}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pegawai", "{{test_nip}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Pegawai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pegawai/{{test_nip}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pegawai", "{{test_nip}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Barang",
+      "item": [
+        {
+          "name": "Create Barang",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode\": \"{{test_kode_barang}}\",\n  \"nama\": \"Laptop Asus ZenBook\",\n  \"harga\": 15000000,\n  \"spesifikasi\": \"Core i7, 16GB RAM, 512GB SSD\",\n  \"merk\": \"Asus\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/barang",
+              "host": ["{{base_url}}"],
+              "path": ["api", "barang"]
+            }
+          }
+        },
+        {
+          "name": "Get All Barang",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/barang",
+              "host": ["{{base_url}}"],
+              "path": ["api", "barang"]
+            }
+          }
+        },
+        {
+          "name": "Get Barang By Kode",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/barang/{{test_kode_barang}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "barang", "{{test_kode_barang}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Barang",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Laptop Asus ZenBook OLED\",\n  \"harga\": 16500000,\n  \"spesifikasi\": \"Core i7, 32GB RAM, 1TB SSD\",\n  \"merk\": \"Asus\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/barang/{{test_kode_barang}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "barang", "{{test_kode_barang}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Barang",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/barang/{{test_kode_barang}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "barang", "{{test_kode_barang}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Warga",
+      "item": [
+        {
+          "name": "Create Warga",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"{{test_nik}}\",\n  \"nama\": \"Budi Santoso\",\n  \"jeniskelamin\": \"Laki-laki\",\n  \"alamat\": \"Jl. Merdeka No. 45\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/warga",
+              "host": ["{{base_url}}"],
+              "path": ["api", "warga"]
+            }
+          }
+        },
+        {
+          "name": "Get All Warga",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/warga",
+              "host": ["{{base_url}}"],
+              "path": ["api", "warga"]
+            }
+          }
+        },
+        {
+          "name": "Get Warga By NIK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/warga/{{test_nik}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "warga", "{{test_nik}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Warga",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Budi Santoso, S.Kom.\",\n  \"jeniskelamin\": \"Laki-laki\",\n  \"alamat\": \"Jl. Sudirman No. 10\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/warga/{{test_nik}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "warga", "{{test_nik}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Warga",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/warga/{{test_nik}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "warga", "{{test_nik}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

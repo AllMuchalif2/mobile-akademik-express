@@ -7,7 +7,8 @@
 CREATE TABLE IF NOT EXISTS mahasiswa (
   nim   VARCHAR(20)  NOT NULL PRIMARY KEY,
   nama  VARCHAR(50)  NOT NULL,
-  prodi VARCHAR(30)  NOT NULL
+  prodi VARCHAR(30)  NOT NULL,
+  kelas VARCHAR(8)
 );
 
 -- ─── 2. PEGAWAI ───────────────────────────────────────────────
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS warga (
 -- ============================================================
 --  SEED DATA — existing rows from local MySQL
 -- ============================================================
-INSERT INTO mahasiswa (nim, nama, prodi) VALUES
-  ('23.230.0025', 'Arnama', 'sistem informasi'),
-  ('23.230.0026', 'Ayu',    'sistem informasi')
+INSERT INTO mahasiswa (nim, nama, prodi, kelas) VALUES
+  ('23.230.0025', 'Arnama', 'sistem informasi', '7P51'),
+  ('23.230.0026', 'Ayu',    'sistem informasi', '7P51')
 ON CONFLICT (nim) DO NOTHING;

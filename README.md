@@ -6,7 +6,7 @@ REST API refactored from **CodeIgniter 4** to **Express.js + Supabase**.
 
 | Resource   | Primary Key | Fields                              |
 | ---------- | ----------- | ----------------------------------- |
-| Mahasiswa  | `nim`       | nim, nama, prodi                    |
+| Mahasiswa  | `nim`       | nim, nama, prodi, kelas             |
 | Pegawai    | `nip`       | nip, nama, dinas, jabatan           |
 | Barang     | `kode`      | kode, nama, harga, spesifikasi, merk|
 | Warga      | `nik`       | nik, nama, jeniskelamin, alamat     |

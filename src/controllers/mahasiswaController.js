@@ -35,10 +35,10 @@ export const getById = async (req, res, next) => {
 // POST /api/mahasiswa
 export const create = async (req, res, next) => {
   try {
-    const { nim, nama, prodi } = req.body;
+    const { nim, nama, prodi, kelas } = req.body;
     const { data, error } = await supabase
       .from(TABLE)
-      .insert([{ nim, nama, prodi }])
+      .insert([{ nim, nama, prodi, kelas }])
       .select()
       .single();
     if (error) throw error;
@@ -52,7 +52,7 @@ export const create = async (req, res, next) => {
 export const update = async (req, res, next) => {
   try {
     const { nim } = req.params;
-    const { nama, prodi } = req.body;
+    const { nama, prodi, kelas } = req.body;
 
     // Check existence
     const { data: existing } = await supabase
@@ -66,7 +66,7 @@ export const update = async (req, res, next) => {
 
     const { data, error } = await supabase
       .from(TABLE)
-      .update({ nama, prodi })
+      .update({ nama, prodi, kelas })
       .eq(PK, nim)
       .select()
       .single();
